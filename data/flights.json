@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "airline": "SkyJet",
+    "flightNumber": "SJ102",
+    "from": "London",
+    "to": "Paris",
+    "departDate": "2026-03-20",
+    "returnDate": "2026-03-27",
+    "departTime": "08:30",
+    "arrivalTime": "10:50",
+    "cabinClass": "Economy",
+    "price": 120,
+    "passengersAvailable": 8
+  },
+  {
+    "id": 2,
+    "airline": "EuroAir",
+    "flightNumber": "EA215",
+    "from": "London",
+    "to": "Paris",
+    "departDate": "2026-03-20",
+    "returnDate": "2026-03-27",
+    "departTime": "13:15",
+    "arrivalTime": "15:25",
+    "cabinClass": "Business",
+    "price": 260,
+    "passengersAvailable": 4
+  },
+  {
+    "id": 3,
+    "airline": "NorthCloud",
+    "flightNumber": "NC331",
+    "from": "London",
+    "to": "Berlin",
+    "departDate": "2026-03-20",
+    "returnDate": "2026-03-25",
+    "departTime": "17:40",
+    "arrivalTime": "20:10",
+    "cabinClass": "Economy",
+    "price": 150,
+    "passengersAvailable": 6
+  }
+]
