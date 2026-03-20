@@ -18,11 +18,16 @@ function selectFlight(flightId) {
     return;
   }
 
+  localStorage.setItem("selectedFlight", JSON.stringify(flight));
+
   selectedFlightText.textContent =
     `${flight.airline} ${flight.flightNumber} | ${flight.from} to ${flight.to} | ${flight.departDate} | GBP ${flight.price}`;
 
   selectedFlightBox.classList.remove("hidden");
+  window.location.href = "personal-details.html";
 }
+
+window.selectFlight = selectFlight;
 
 function displayFlights(flights) {
   if (!flights.length) {

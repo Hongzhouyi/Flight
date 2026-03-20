@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Details</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav">
+      <a href="index.html" class="active">Book</a>
+      <a href="#">Manage</a>
+      <a href="#">About us</a>
+      <a href="#">My Account</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="results-panel">
+      <h1>Personal Details</h1>
+
+      <div id="selected-flight-summary" class="selected-flight">
+        <h3>Selected Flight</h3>
+        <p id="flight-summary-text"></p>
+      </div>
+
+      <form class="search-form">
+        <label>
+          Full Name
+          <input type="text" placeholder="Enter full name" />
+        </label>
+
+        <label>
+          Email
+          <input type="email" placeholder="Enter email" />
+        </label>
+      </form>
+
+      <div class="page-actions">
+        <a class="back-link" href="index.html">Back to Search Results</a>
+        <button type="button">Next</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/personal-details.js"></script>
+</body>
+</html>
