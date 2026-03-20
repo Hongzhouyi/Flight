@@ -1,0 +1,26 @@
+name: Java Check
+
+on:
+  push:
+    branches:
+      - main
+      - codex/**
+      - search-results-page
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Run search flow test
+        run: bash tests/test_search.sh
