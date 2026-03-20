@@ -30,11 +30,23 @@
         <p id="passenger-summary-text"></p>
       </div>
 
-      <p class="empty-state">Seat selection UI will be added next.</p>
+      <div class="selected-flight">
+        <h3>Selected Seat</h3>
+        <p id="seat-summary-text">No seat selected yet.</p>
+      </div>
+
+      <div class="seat-map" id="seat-map">
+        <button type="button" class="seat-button" data-seat="1A">1A</button>
+        <button type="button" class="seat-button" data-seat="1B">1B</button>
+        <button type="button" class="seat-button" data-seat="1C">1C</button>
+        <button type="button" class="seat-button" data-seat="2A">2A</button>
+        <button type="button" class="seat-button" data-seat="2B">2B</button>
+        <button type="button" class="seat-button" data-seat="2C">2C</button>
+      </div>
 
       <div class="page-actions">
         <a class="back-link" href="personal-details.html">Back to Personal Details</a>
-        <button type="button">Next</button>
+        <button type="button" id="next-button" disabled>Next</button>
       </div>
     </section>
   </main>

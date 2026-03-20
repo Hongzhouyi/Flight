@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav">
+      <a href="index.html" class="active">Book</a>
+      <a href="#">Manage</a>
+      <a href="#">About us</a>
+      <a href="#">My Account</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="results-panel">
+      <h1>Payment</h1>
+
+      <div class="selected-flight">
+        <h3>Selected Flight</h3>
+        <p id="payment-flight-summary"></p>
+      </div>
+
+      <div class="selected-flight">
+        <h3>Passenger Details</h3>
+        <p id="payment-passenger-summary"></p>
+      </div>
+
+      <div class="selected-flight">
+        <h3>Selected Seat</h3>
+        <p id="payment-seat-summary"></p>
+      </div>
+
+      <form class="search-form">
+        <label>
+          Cardholder Name
+          <input type="text" placeholder="Enter cardholder name" />
+        </label>
+
+        <label>
+          Card Number
+          <input type="text" placeholder="Enter card number" />
+        </label>
+      </form>
+
+      <div class="page-actions">
+        <a class="back-link" href="seat-selection.html">Back to Seat Selection</a>
+        <button type="button">Confirm</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/payment.js"></script>
+</body>
+</html>
