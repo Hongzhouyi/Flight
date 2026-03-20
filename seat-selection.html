@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Personal Details</title>
+  <title>Seat Selection</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
@@ -18,32 +18,27 @@
 
   <main class="page">
     <section class="results-panel">
-      <h1>Personal Details</h1>
+      <h1>Seat Selection</h1>
 
       <div id="selected-flight-summary" class="selected-flight">
         <h3>Selected Flight</h3>
         <p id="flight-summary-text"></p>
       </div>
 
-      <form class="search-form" id="personal-details-form">
-        <label>
-          Full Name
-          <input type="text" id="full-name" placeholder="Enter full name" />
-        </label>
+      <div class="selected-flight">
+        <h3>Passenger Details</h3>
+        <p id="passenger-summary-text"></p>
+      </div>
 
-        <label>
-          Email
-          <input type="email" id="email" placeholder="Enter email" />
-        </label>
-      </form>
+      <p class="empty-state">Seat selection UI will be added next.</p>
 
       <div class="page-actions">
-        <a class="back-link" href="index.html">Back to Search Results</a>
-        <button type="button" id="next-button">Next</button>
+        <a class="back-link" href="personal-details.html">Back to Personal Details</a>
+        <button type="button">Next</button>
       </div>
     </section>
   </main>
 
-  <script src="js/personal-details.js"></script>
+  <script src="js/seat-selection.js"></script>
 </body>
 </html>

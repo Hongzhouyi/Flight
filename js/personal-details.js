@@ -1,4 +1,7 @@
 const summaryText = document.getElementById("flight-summary-text");
+const nextButton = document.getElementById("next-button");
+const fullNameInput = document.getElementById("full-name");
+const emailInput = document.getElementById("email");
 
 const savedFlight = localStorage.getItem("selectedFlight");
 
@@ -10,3 +13,13 @@ if (!savedFlight) {
   summaryText.textContent =
     `${flight.airline} ${flight.flightNumber} | ${flight.from} to ${flight.to} | ${flight.departDate} | ${flight.departTime} - ${flight.arrivalTime} | ${flight.cabinClass} | GBP ${flight.price}`;
 }
+
+nextButton.addEventListener("click", () => {
+  const passengerDetails = {
+    fullName: fullNameInput.value.trim(),
+    email: emailInput.value.trim()
+  };
+
+  localStorage.setItem("passengerDetails", JSON.stringify(passengerDetails));
+  window.location.href = "seat-selection.html";
+});
