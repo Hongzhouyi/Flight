@@ -20,10 +20,12 @@ public class FlightServer {
     private static final Path CSS_PATH = Path.of("static", "styles.css");
     private static final Pattern IATA_PATTERN = Pattern.compile("^[A-Za-z]{0,3}$");
     private static final Pattern DATE_PATTERN = Pattern.compile("^$|^\\d{4}-\\d{2}-\\d{2}$");
+    private static final int DEFAULT_PORT = 8000;
 
     public static void main(String[] args) throws IOException {
         initDatabase();
-        HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", 5000), 0);
+        int port = resolvePort();
+        HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", port), 0);
 
         server.createContext("/", exchange -> {
             if (!"GET".equals(exchange.getRequestMethod())) {
@@ -42,6 +44,11 @@ public class FlightServer {
                 return;
             }
 
+            if ("/personal-details".equals(path)) {
+                handlePersonalDetails(exchange);
+                return;
+            }
+
             if ("/static/styles.css".equals(path)) {
                 handleCss(exchange);
                 return;
@@ -52,7 +59,20 @@ public class FlightServer {
 
         server.setExecutor(null);
         server.start();
-        System.out.println("Flight server running on http://0.0.0.0:5000");
+        System.out.println("Flight server running on http://0.0.0.0:" + port);
+    }
+
+    private static int resolvePort() {
+        String envPort = System.getenv("PORT");
+        if (envPort == null || envPort.isBlank()) {
+            return DEFAULT_PORT;
+        }
+
+        try {
+            return Integer.parseInt(envPort.trim());
+        } catch (NumberFormatException ignored) {
+            return DEFAULT_PORT;
+        }
     }
 
     private static void initDatabase() throws IOException {
@@ -98,6 +118,13 @@ public class FlightServer {
         send(exchange, 200, renderResults(flights, origin, destination, date), "text/html; charset=utf-8");
     }
 
+    private static void handlePersonalDetails(HttpExchange exchange) throws IOException {
+        Map<String, String> params = parseQuery(exchange.getRequestURI());
+        String flightId = params.getOrDefault("flight_id", "").trim();
+
+        send(exchange, 200, renderPersonalDetails(flightId), "text/html; charset=utf-8");
+    }
+
     private static void handleCss(HttpExchange exchange) throws IOException {
         if (!Files.exists(CSS_PATH)) {
             send(exchange, 404, "Not Found", "text/plain; charset=utf-8");
@@ -108,7 +135,7 @@ public class FlightServer {
 
     private static List<Map<String, String>> queryFlights(String origin, String destination, String date) throws IOException {
         StringBuilder sql = new StringBuilder(
-            "SELECT flight_number, origin, destination, departure_date, departure_time, arrival_time, price FROM flights WHERE 1=1"
+            "SELECT id, flight_number, origin, destination, departure_date, departure_time, arrival_time, price FROM flights WHERE 1=1"
         );
 
         if (!origin.isEmpty()) {
@@ -136,17 +163,18 @@ public class FlightServer {
                 continue;
             }
             String[] parts = line.split("\\|", -1);
-            if (parts.length != 7) {
+            if (parts.length != 8) {
                 continue;
             }
             Map<String, String> row = new HashMap<>();
-            row.put("flight_number", parts[0]);
-            row.put("origin", parts[1]);
-            row.put("destination", parts[2]);
-            row.put("departure_date", parts[3]);
-            row.put("departure_time", parts[4]);
-            row.put("arrival_time", parts[5]);
-            row.put("price", parts[6]);
+            row.put("id", parts[0]);
+            row.put("flight_number", parts[1]);
+            row.put("origin", parts[2]);
+            row.put("destination", parts[3]);
+            row.put("departure_date", parts[4]);
+            row.put("departure_time", parts[5]);
+            row.put("arrival_time", parts[6]);
+            row.put("price", parts[7]);
             rows.add(row);
         }
 
@@ -189,12 +217,15 @@ public class FlightServer {
                 .append("<td>").append(escapeHtml(flight.get("departure_time"))).append("</td>")
                 .append("<td>").append(escapeHtml(flight.get("arrival_time"))).append("</td>")
                 .append("<td>£").append(escapeHtml(flight.get("price"))).append("</td>")
+                .append("<td><a href=\"/personal-details?flight_id=")
+                .append(escapeHtml(flight.get("id")))
+                .append("\">Select Flight</a></td>")
                 .append("</tr>");
         }
 
         String table = flights.isEmpty()
             ? "<p class=\"empty\">No matching flights found.</p>"
-            : "<table><thead><tr><th>Flight</th><th>Route</th><th>Date</th><th>Depart</th><th>Arrive</th><th>Price</th></tr></thead><tbody>"
+            : "<table><thead><tr><th>Flight</th><th>Route</th><th>Date</th><th>Depart</th><th>Arrive</th><th>Price</th><th>Action</th></tr></thead><tbody>"
                 + rows + "</tbody></table>";
 
         return """
@@ -221,6 +252,31 @@ public class FlightServer {
             escapeHtml(date.isBlank() ? "ANY DATE" : date),
             table
         );
+    }
+
+    private static String renderPersonalDetails(String flightId) {
+        return """
+            <!doctype html>
+            <html lang=\"en\">
+              <head>
+                <meta charset=\"utf-8\">
+                <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+                <title>Personal Details</title>
+                <link rel=\"stylesheet\" href=\"/static/styles.css\">
+              </head>
+              <body>
+                <main class=\"container\">
+                  <h1>Personal Details</h1>
+                  <p>Selected flight id: <strong>%s</strong></p>
+                  <form class=\"search-form\">
+                    <label>Full name<input type=\"text\" name=\"full_name\" placeholder=\"Enter full name\"></label>
+                    <label>Email<input type=\"email\" name=\"email\" placeholder=\"Enter email\"></label>
+                  </form>
+                  <a class=\"back-link\" href=\"/\">← Back to search</a>
+                </main>
+              </body>
+            </html>
+            """.formatted(escapeHtml(flightId.isBlank() ? "not selected" : flightId));
     }
 
     private static void send(HttpExchange exchange, int code, String body, String contentType) throws IOException {
