@@ -121,8 +121,8 @@ public class FlightServer {
     private static void handlePersonalDetails(HttpExchange exchange) throws IOException {
         Map<String, String> params = parseQuery(exchange.getRequestURI());
         String flightId = params.getOrDefault("flight_id", "").trim();
-
-        send(exchange, 200, renderPersonalDetails(flightId), "text/html; charset=utf-8");
+        Map<String, String> flight = queryFlightById(flightId);
+        send(exchange, 200, renderPersonalDetails(flightId, flight), "text/html; charset=utf-8");
     }
 
     private static void handleCss(HttpExchange exchange) throws IOException {
@@ -179,6 +179,42 @@ public class FlightServer {
         }
 
         return rows;
+    }
+
+    private static Map<String, String> queryFlightById(String flightId) throws IOException {
+        if (flightId.isBlank() || !flightId.chars().allMatch(Character::isDigit)) {
+            return null;
+        }
+
+        String output = runSqlRaw("""
+            SELECT id, flight_number, origin, destination, departure_date, departure_time, arrival_time, price
+            FROM flights
+            WHERE id = %s;
+            """.formatted(flightId), true);
+
+        for (String line : output.split("\\R")) {
+            if (line.isBlank()) {
+                continue;
+            }
+
+            String[] parts = line.split("\\|", -1);
+            if (parts.length != 8) {
+                continue;
+            }
+
+            Map<String, String> row = new HashMap<>();
+            row.put("id", parts[0]);
+            row.put("flight_number", parts[1]);
+            row.put("origin", parts[2]);
+            row.put("destination", parts[3]);
+            row.put("departure_date", parts[4]);
+            row.put("departure_time", parts[5]);
+            row.put("arrival_time", parts[6]);
+            row.put("price", parts[7]);
+            return row;
+        }
+
+        return null;
     }
 
     private static String renderIndex() {
@@ -254,7 +290,18 @@ public class FlightServer {
         );
     }
 
-    private static String renderPersonalDetails(String flightId) {
+    private static String renderPersonalDetails(String flightId, Map<String, String> flight) {
+        String summary = flight == null
+            ? "<p class=\"empty\">No flight selected.</p>"
+            : "<div class=\"flight-summary\">"
+                + "<h2>Selected Flight</h2>"
+                + "<p><strong>Flight:</strong> " + escapeHtml(flight.get("flight_number")) + "</p>"
+                + "<p><strong>Route:</strong> " + escapeHtml(flight.get("origin")) + " → " + escapeHtml(flight.get("destination")) + "</p>"
+                + "<p><strong>Date:</strong> " + escapeHtml(flight.get("departure_date")) + "</p>"
+                + "<p><strong>Time:</strong> " + escapeHtml(flight.get("departure_time")) + " - " + escapeHtml(flight.get("arrival_time")) + "</p>"
+                + "<p><strong>Price:</strong> £" + escapeHtml(flight.get("price")) + "</p>"
+                + "</div>";
+
         return """
             <!doctype html>
             <html lang=\"en\">
@@ -267,7 +314,7 @@ public class FlightServer {
               <body>
                 <main class=\"container\">
                   <h1>Personal Details</h1>
-                  <p>Selected flight id: <strong>%s</strong></p>
+                  %s
                   <form class=\"search-form\">
                     <label>Full name<input type=\"text\" name=\"full_name\" placeholder=\"Enter full name\"></label>
                     <label>Email<input type=\"email\" name=\"email\" placeholder=\"Enter email\"></label>
@@ -276,7 +323,7 @@ public class FlightServer {
                 </main>
               </body>
             </html>
-            """.formatted(escapeHtml(flightId.isBlank() ? "not selected" : flightId));
+            """.formatted(summary);
     }
 
     private static void send(HttpExchange exchange, int code, String body, String contentType) throws IOException {

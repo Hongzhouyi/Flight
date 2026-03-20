@@ -12,9 +12,12 @@ sleep 1
 
 INDEX_CONTENT=$(curl -sS "http://127.0.0.1:${PORT}/")
 RESULT_CONTENT=$(curl -sS "http://127.0.0.1:${PORT}/search?origin=LHR&destination=CDG&departure_date=2026-03-20")
+DETAIL_CONTENT=$(curl -sS "http://127.0.0.1:${PORT}/personal-details?flight_id=1")
 
 [[ "$INDEX_CONTENT" == *"Flight Search (Java version)"* ]]
 [[ "$RESULT_CONTENT" == *"FL101"* ]]
 [[ "$RESULT_CONTENT" == *"FL205"* ]]
+[[ "$DETAIL_CONTENT" == *"Selected Flight"* ]]
+[[ "$DETAIL_CONTENT" == *"FL101"* ]]
 
 echo "search test passed"
