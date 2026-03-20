@@ -62,3 +62,17 @@ td {
   display: inline-block;
   margin-top: 1rem;
 }
+
+.flight-summary,
+.message-box {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  background: #eef4ff;
+  border: 1px solid #d4e2ff;
+}
+
+.message-box h2,
+.flight-summary h2 {
+  margin-top: 0;
+}

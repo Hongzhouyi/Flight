@@ -292,7 +292,11 @@ public class FlightServer {
 
     private static String renderPersonalDetails(String flightId, Map<String, String> flight) {
         String summary = flight == null
-            ? "<p class=\"empty\">No flight selected.</p>"
+            ? "<div class=\"message-box\">"
+                + "<h2>No Flight Selected</h2>"
+                + "<p>We could not find a selected flight for this page.</p>"
+                + "<p>Please go back to the search results and choose a flight first.</p>"
+                + "</div>"
             : "<div class=\"flight-summary\">"
                 + "<h2>Selected Flight</h2>"
                 + "<p><strong>Flight:</strong> " + escapeHtml(flight.get("flight_number")) + "</p>"
