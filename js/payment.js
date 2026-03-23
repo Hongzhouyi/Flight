@@ -2,6 +2,9 @@ const paymentFlightSummary = document.getElementById("payment-flight-summary");
 const paymentPassengerSummary = document.getElementById("payment-passenger-summary");
 const paymentSeatSummary = document.getElementById("payment-seat-summary");
 const confirmButton = document.getElementById("confirm-button");
+const cardholderNameInput = document.getElementById("cardholder-name");
+const cardNumberInput = document.getElementById("card-number");
+const paymentMessage = document.getElementById("payment-message");
 
 const savedFlight = localStorage.getItem("selectedFlight");
 const savedPassenger = localStorage.getItem("passengerDetails");
@@ -30,5 +33,21 @@ if (!savedSeat) {
 }
 
 confirmButton.addEventListener("click", () => {
+  const cardholderName = cardholderNameInput.value.trim();
+  const cardNumber = cardNumberInput.value.trim();
+
+  if (!cardholderName || !cardNumber) {
+    paymentMessage.textContent = "Please enter cardholder name and card number.";
+    return;
+  }
+
+  paymentMessage.textContent = "";
+
+  const paymentDetails = {
+    cardholderName,
+    cardNumber
+  };
+
+  localStorage.setItem("paymentDetails", JSON.stringify(paymentDetails));
   window.location.href = "booking-confirmed.html";
 });

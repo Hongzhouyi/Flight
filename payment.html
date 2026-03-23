@@ -35,17 +35,19 @@
         <p id="payment-seat-summary"></p>
       </div>
 
-      <form class="search-form">
+      <form class="search-form" id="payment-form">
         <label>
           Cardholder Name
-          <input type="text" placeholder="Enter cardholder name" />
+          <input type="text" id="cardholder-name" placeholder="Enter cardholder name" />
         </label>
 
         <label>
           Card Number
-          <input type="text" placeholder="Enter card number" />
+          <input type="text" id="card-number" placeholder="Enter card number" />
         </label>
       </form>
+
+      <p id="payment-message" class="empty-state"></p>
 
       <div class="page-actions">
         <a class="back-link" href="seat-selection.html">Back to Seat Selection</a>
