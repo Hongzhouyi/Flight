@@ -15,9 +15,17 @@ if (!savedFlight) {
 }
 
 nextButton.addEventListener("click", () => {
+  const fullName = fullNameInput.value.trim();
+  const email = emailInput.value.trim();
+
+  if (!fullName || !email) {
+    alert("Please enter your full name and email.");
+    return;
+  }
+
   const passengerDetails = {
-    fullName: fullNameInput.value.trim(),
-    email: emailInput.value.trim()
+    fullName,
+    email
   };
 
   localStorage.setItem("passengerDetails", JSON.stringify(passengerDetails));
