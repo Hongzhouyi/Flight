@@ -1,6 +1,7 @@
 const paymentFlightSummary = document.getElementById("payment-flight-summary");
 const paymentPassengerSummary = document.getElementById("payment-passenger-summary");
 const paymentSeatSummary = document.getElementById("payment-seat-summary");
+const confirmButton = document.getElementById("confirm-button");
 
 const savedFlight = localStorage.getItem("selectedFlight");
 const savedPassenger = localStorage.getItem("passengerDetails");
@@ -27,3 +28,7 @@ if (!savedSeat) {
 } else {
   paymentSeatSummary.textContent = savedSeat;
 }
+
+confirmButton.addEventListener("click", () => {
+  window.location.href = "booking-confirmed.html";
+});
