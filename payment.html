@@ -1,59 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Payment</title>
-  <link rel="stylesheet" href="css/styles.css" />
-</head>
-<body>
-  <header class="topbar">
-    <nav class="nav">
-      <a href="index.html" class="active">Book</a>
-      <a href="#">Manage</a>
-      <a href="#">About us</a>
-      <a href="#">My Account</a>
-    </nav>
-  </header>
+const paymentFlightSummary = document.getElementById("payment-flight-summary");
+const paymentPassengerSummary = document.getElementById("payment-passenger-summary");
+const paymentSeatSummary = document.getElementById("payment-seat-summary");
 
-  <main class="page">
-    <section class="results-panel">
-      <h1>Payment</h1>
+const savedFlight = localStorage.getItem("selectedFlight");
+const savedPassenger = localStorage.getItem("passengerDetails");
+const savedSeat = localStorage.getItem("selectedSeat");
 
-      <div class="selected-flight">
-        <h3>Selected Flight</h3>
-        <p id="payment-flight-summary"></p>
-      </div>
+if (!savedFlight) {
+  paymentFlightSummary.textContent = "No flight selected yet.";
+} else {
+  const flight = JSON.parse(savedFlight);
+  paymentFlightSummary.textContent =
+    `${flight.airline} ${flight.flightNumber} | ${flight.from} to ${flight.to} | ${flight.departDate}`;
+}
 
-      <div class="selected-flight">
-        <h3>Passenger Details</h3>
-        <p id="payment-passenger-summary"></p>
-      </div>
+if (!savedPassenger) {
+  paymentPassengerSummary.textContent = "No passenger details saved yet.";
+} else {
+  const passenger = JSON.parse(savedPassenger);
+  paymentPassengerSummary.textContent =
+    `${passenger.fullName} | ${passenger.email}`;
+}
 
-      <div class="selected-flight">
-        <h3>Selected Seat</h3>
-        <p id="payment-seat-summary"></p>
-      </div>
-
-      <form class="search-form">
-        <label>
-          Cardholder Name
-          <input type="text" placeholder="Enter cardholder name" />
-        </label>
-
-        <label>
-          Card Number
-          <input type="text" placeholder="Enter card number" />
-        </label>
-      </form>
-
-      <div class="page-actions">
-        <a class="back-link" href="seat-selection.html">Back to Seat Selection</a>
-        <button type="button">Confirm</button>
-      </div>
-    </section>
-  </main>
-
-  <script src="js/payment.js"></script>
-</body>
-</html>
+if (!savedSeat) {
+  paymentSeatSummary.textContent = "No seat selected yet.";
+} else {
+  paymentSeatSummary.textContent = savedSeat;
+}

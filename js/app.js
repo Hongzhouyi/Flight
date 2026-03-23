@@ -58,35 +58,4 @@ function displayFlights(flights) {
 form.addEventListener("submit", (event) => {
   event.preventDefault();
 
-  const from = document.getElementById("from").value.trim().toLowerCase();
-  const to = document.getElementById("to").value.trim().toLowerCase();
-  const departDate = document.getElementById("departDate").value;
-  const returnDate = document.getElementById("returnDate").value;
-  const cabinClass = document.getElementById("cabinClass").value;
-  const passengers = Number(document.getElementById("passengers").value);
-
-  const filteredFlights = allFlights.filter((flight) => {
-    const matchesFrom = !from || flight.from.toLowerCase().includes(from);
-    const matchesTo = !to || flight.to.toLowerCase().includes(to);
-    const matchesDepartDate = !departDate || flight.departDate === departDate;
-    const matchesReturnDate = !returnDate || flight.returnDate === returnDate;
-    const matchesCabinClass = !cabinClass || flight.cabinClass === cabinClass;
-    const matchesPassengers = !passengers || flight.passengersAvailable >= passengers;
-
-    return (
-      matchesFrom &&
-      matchesTo &&
-      matchesDepartDate &&
-      matchesReturnDate &&
-      matchesCabinClass &&
-      matchesPassengers
-    );
-  });
-
-  displayFlights(filteredFlights);
-});
-
-loadFlights().catch(() => {
-  resultsContainer.innerHTML =
-    '<p class="empty-state">Could not load flight data.</p>';
-});
+  const from = document.getElement
